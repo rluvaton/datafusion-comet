@@ -41,7 +41,7 @@ under the License.
       
   
     
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/pydata-sphinx-theme.css?v=1140d252" />
     <link rel="stylesheet" type="text/css" href="../../_static/theme_overrides.css?v=c6d785ac" />
     
@@ -204,6 +204,11 @@ under the License.
   </a>
  </li>
  <li class="toctree-l1">
+  <a class="reference internal" href="../tracing.html">
+   Tracing
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="../profiling_native_code.html">
    Profiling Native Code
   </a>
@@ -278,9 +283,36 @@ under the License.
               
               <div class="toc-item">
                 
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
 
 <nav id="bd-toc-nav">
-    
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Apache DataFusion Comet: Benchmarks Derived From TPC-H
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#scripts">
+   Scripts
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#apache-spark">
+     Apache Spark
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#apache-spark-comet">
+     Apache Spark + Comet
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
 </nav>
               </div>
               
@@ -332,7 +364,7 @@ data stored locally in Parquet format on NVMe storage. Performance characteristi
 and we encourage you to run these benchmarks in your own environments.</p>
 <p>The tracking issue for improving TPC-H performance is <a class="reference external" href="https://github.com/apache/datafusion-comet/issues/391">#391</a>.</p>
 <p><img alt="" src="../../_images/tpch_allqueries.png" /></p>
-<p>Here is a breakdown showing relative performance of Spark, Comet, and DataFusion for each query.</p>
+<p>Here is a breakdown showing relative performance of Spark and Comet for each query.</p>
 <p><img alt="" src="../../_images/tpch_queries_compare.png" /></p>
 <p>The following chart shows how much Comet currently accelerates each query from the benchmark in relative terms.</p>
 <p><img alt="" src="../../_images/tpch_queries_speedup_rel.png" /></p>
@@ -340,9 +372,99 @@ and we encourage you to run these benchmarks in your own environments.</p>
 <p><img alt="" src="../../_images/tpch_queries_speedup_abs.png" /></p>
 <p>The raw results of these benchmarks in JSON format is available here:</p>
 <ul class="simple">
-<li><p><a class="reference download internal" download="" href="../../_downloads/9e848a9cc1377847bac6c7c280c15083/spark-tpch.json"><span class="xref download myst">Spark</span></a></p></li>
-<li><p><a class="reference download internal" download="" href="../../_downloads/180af7f5ca0d6ea4521d87c6058b110f/comet-tpch.json"><span class="xref download myst">Comet</span></a></p></li>
+<li><p><a class="reference download internal" download="" href="../../_downloads/ee2240cfdfbfad5d101e90ad0cb08b2c/spark-tpch.json"><span class="xref download myst">Spark</span></a></p></li>
+<li><p><a class="reference download internal" download="" href="../../_downloads/b21ffbbe822a491f187eb8426b042072/comet-tpch.json"><span class="xref download myst">Comet</span></a></p></li>
 </ul>
+</section>
+<section id="scripts">
+<h1>Scripts<a class="headerlink" href="#scripts" title="Link to this heading">¶</a></h1>
+<p>Here are the scripts that were used to generate these results.</p>
+<section id="apache-spark">
+<h2>Apache Spark<a class="headerlink" href="#apache-spark" title="Link to this heading">¶</a></h2>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">$SPARK_HOME</span>/bin/spark-submit<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--master<span class="w"> </span><span class="nv">$SPARK_MASTER</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.driver.memory<span class="o">=</span>8G<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.executor.instances<span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.executor.cores<span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.executor.memory<span class="o">=</span>16G<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.memory.offHeap.enabled<span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.memory.offHeap.size<span class="o">=</span>16g<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--deploy-mode<span class="w"> </span>cluster<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.kubernetes.container.image.pullPolicy<span class="o">=</span>Always<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.kubernetes.authenticate.driver.serviceAccountName<span class="o">=</span>spark<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.kubernetes.driver.container.image<span class="o">=</span><span class="nv">$SPARK_BENCHMARK_IMAGE</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.kubernetes.driver.volumes.persistentVolumeClaim.benchmark-results-pv.options.claimName<span class="o">=</span>benchmark-results-pvc<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.kubernetes.driver.volumes.persistentVolumeClaim.benchmark-results-pv.mount.path<span class="o">=</span>/mnt/benchmark-results<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.kubernetes.driver.volumes.persistentVolumeClaim.benchmark-results-pv.mount.readOnly<span class="o">=</span><span class="nb">false</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.kubernetes.driver.volumes.hostPath.data.mount.path<span class="o">=</span>/mnt/bigdata<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.kubernetes.driver.volumes.hostPath.data.options.path<span class="o">=</span>/mnt/bigdata<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.kubernetes.driver.volumes.hostPath.data.options.readOnly<span class="o">=</span><span class="nb">false</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.kubernetes.executor.container.image<span class="o">=</span><span class="nv">$SPARK_BENCHMARK_IMAGE</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.kubernetes.executor.volumes.hostPath.data.mount.path<span class="o">=</span>/mnt/bigdata<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.kubernetes.executor.volumes.hostPath.data.options.path<span class="o">=</span>/mnt/bigdata<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.eventLog.enabled<span class="o">=</span><span class="nb">false</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>local:///tpcbench.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>spark<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--benchmark<span class="w"> </span>tpch<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--data<span class="w"> </span>/mnt/bigdata/tpch/sf100/<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--queries<span class="w"> </span>/tpch<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output<span class="w"> </span>/mnt/benchmark-results<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--iterations<span class="w"> </span><span class="m">1</span>
+</pre></div>
+</div>
+</section>
+<section id="apache-spark-comet">
+<h2>Apache Spark + Comet<a class="headerlink" href="#apache-spark-comet" title="Link to this heading">¶</a></h2>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">COMET_JAR</span><span class="o">=</span>local:///opt/spark/jars/comet-spark-spark3.5_2.12-0.7.0.jar
+<span class="nv">$SPARK_HOME</span>/bin/spark-submit<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--master<span class="w"> </span><span class="nv">$SPARK_MASTER</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.driver.memory<span class="o">=</span>8G<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.executor.instances<span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.executor.cores<span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.executor.memory<span class="o">=</span>16G<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.memory.offHeap.enabled<span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.memory.offHeap.size<span class="o">=</span>16g<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.shuffle.manager<span class="o">=</span>org.apache.spark.sql.comet.execution.shuffle.CometShuffleManager<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.comet.exec.enabled<span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.comet.scan.impl<span class="o">=</span>native_comet<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.comet.cast.allowIncompatible<span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.comet.exec.replaceSortMergeJoin<span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.comet.exec.shuffle.enabled<span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.comet.exec.shuffle.mode<span class="o">=</span>auto<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.comet.exec.shuffle.fallbackToColumnar<span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.comet.exec.shuffle.compression.codec<span class="o">=</span>lz4<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.comet.exec.shuffle.compression.level<span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.comet.explain.native.enabled<span class="o">=</span><span class="nb">false</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--deploy-mode<span class="w"> </span>cluster<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--jars<span class="w"> </span><span class="nv">$COMET_JAR</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.driver.extraClassPath<span class="o">=</span><span class="nv">$COMET_JAR</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.executor.extraClassPath<span class="o">=</span><span class="nv">$COMET_JAR</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.driver.extraJavaOptions<span class="o">=</span><span class="s2">&quot;-Dlog4j.configuration=file:/opt/spark/conf/log4j.properties&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.executor.extraJavaOptions<span class="o">=</span><span class="s2">&quot;-Dlog4j.configuration=file:/opt/spark/conf/log4j.properties&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.plugins<span class="o">=</span>org.apache.spark.CometPlugin<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.kubernetes.container.image.pullPolicy<span class="o">=</span>Always<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.kubernetes.authenticate.driver.serviceAccountName<span class="o">=</span>spark<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.kubernetes.driver.container.image<span class="o">=</span><span class="nv">$COMET_BENCHMARK_IMAGE</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.kubernetes.driver.volumes.persistentVolumeClaim.benchmark-results-pv.options.claimName<span class="o">=</span>benchmark-results-pvc<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.kubernetes.driver.volumes.persistentVolumeClaim.benchmark-results-pv.mount.path<span class="o">=</span>/mnt/benchmark-results<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.kubernetes.driver.volumes.persistentVolumeClaim.benchmark-results-pv.mount.readOnly<span class="o">=</span><span class="nb">false</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.kubernetes.driver.volumes.hostPath.data.mount.path<span class="o">=</span>/mnt/bigdata<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.kubernetes.driver.volumes.hostPath.data.options.path<span class="o">=</span>/mnt/bigdata<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.kubernetes.driver.volumes.hostPath.data.options.readOnly<span class="o">=</span><span class="nb">false</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.kubernetes.executor.container.image<span class="o">=</span><span class="nv">$COMET_BENCHMARK_IMAGE</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.kubernetes.executor.volumes.hostPath.data.mount.path<span class="o">=</span>/mnt/bigdata<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.kubernetes.executor.volumes.hostPath.data.options.path<span class="o">=</span>/mnt/bigdata<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.eventLog.enabled<span class="o">=</span><span class="nb">false</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>local:///tpcbench.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>comet<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--benchmark<span class="w"> </span>tpch<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--data<span class="w"> </span>/mnt/bigdata/tpch/sf100/<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--queries<span class="w"> </span>/tpch<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output<span class="w"> </span>/mnt/benchmark-results<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--iterations<span class="w"> </span><span class="m">1</span>
+</pre></div>
+</div>
+</section>
 </section>
 
 

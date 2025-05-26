@@ -41,7 +41,7 @@ under the License.
       
   
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/pydata-sphinx-theme.css?v=1140d252" />
     <link rel="stylesheet" type="text/css" href="../_static/theme_overrides.css?v=c6d785ac" />
     
@@ -206,6 +206,11 @@ under the License.
   </a>
  </li>
  <li class="toctree-l1">
+  <a class="reference internal" href="../contributor-guide/tracing.html">
+   Tracing
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="../contributor-guide/profiling_native_code.html">
    Profiling Native Code
   </a>
@@ -349,7 +354,7 @@ under the License.
 <h2>Using a Published Source Release<a class="headerlink" href="#using-a-published-source-release" title="Link to this heading">¶</a></h2>
 <p>Official source releases can be downloaded from https://dist.apache.org/repos/dist/release/datafusion/</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Pick<span class="w"> </span>the<span class="w"> </span>latest<span class="w"> </span>version
-<span class="go">export COMET_VERSION=0.4.0</span>
+<span class="go">export COMET_VERSION=0.7.0</span>
 <span class="gp"># </span>Download<span class="w"> </span>the<span class="w"> </span>tarball
 <span class="go">curl -O &quot;https://dist.apache.org/repos/dist/release/datafusion/datafusion-comet-$COMET_VERSION/apache-datafusion-comet-$COMET_VERSION.tar.gz&quot;</span>
 <span class="gp"># </span>Unpack
@@ -358,7 +363,7 @@ under the License.
 </pre></div>
 </div>
 <p>Build</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">make release-nogit PROFILES=&quot;-Pspark-3.4&quot;</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">make release-nogit PROFILES=&quot;-Pspark-3.5&quot;</span>
 </pre></div>
 </div>
 </section>
@@ -370,15 +375,15 @@ under the License.
 </div>
 <p>Build Comet for a specific Spark version:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd datafusion-comet</span>
-<span class="go">make release PROFILES=&quot;-Pspark-3.4&quot;</span>
+<span class="go">make release PROFILES=&quot;-Pspark-3.5&quot;</span>
 </pre></div>
 </div>
 <p>Note that the project builds for Scala 2.12 by default but can be built for Scala 2.13 using an additional profile:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">make release PROFILES=&quot;-Pspark-3.4 -Pscala-2.13&quot;</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">make release PROFILES=&quot;-Pspark-3.5 -Pscala-2.13&quot;</span>
 </pre></div>
 </div>
 <p>To build Comet from the source distribution on an isolated environment without an access to <code class="docutils literal notranslate"><span class="pre">github.com</span></code> it is necessary to disable <code class="docutils literal notranslate"><span class="pre">git-commit-id-maven-plugin</span></code>, otherwise you will face errors that there is no access to the git during the build process. In that case you may use:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">make release-nogit PROFILES=&quot;-Pspark-3.4&quot;</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">make release-nogit PROFILES=&quot;-Pspark-3.5&quot;</span>
 </pre></div>
 </div>
 </section>

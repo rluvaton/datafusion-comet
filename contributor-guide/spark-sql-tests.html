@@ -41,7 +41,7 @@ under the License.
       
   
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/pydata-sphinx-theme.css?v=1140d252" />
     <link rel="stylesheet" type="text/css" href="../_static/theme_overrides.css?v=c6d785ac" />
     
@@ -205,6 +205,11 @@ under the License.
   </a>
  </li>
  <li class="toctree-l1">
+  <a class="reference internal" href="tracing.html">
+   Tracing
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="profiling_native_code.html">
    Profiling Native Code
   </a>
@@ -299,6 +304,23 @@ under the License.
   <a class="reference internal nav-link" href="#run-spark-sql-tests">
    3. Run Spark SQL Tests
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#use-the-following-commands-to-run-the-spark-sql-test-suite-locally">
+     Use the following commands to run the Spark SQL test suite locally.
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#steps-to-run-individual-test-suites-through-sbt">
+     Steps to run individual test suites through SBT
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#steps-to-run-individual-test-suites-in-intellij-ide">
+     Steps to run individual test suites in IntelliJ IDE
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#creating-a-diff-file-for-a-new-spark-version">
@@ -384,16 +406,17 @@ Comet is enabled when we run the tests.</p>
 <section id="clone-spark-and-apply-diff">
 <h2>2. Clone Spark and Apply Diff<a class="headerlink" href="#clone-spark-and-apply-diff" title="Link to this heading">¶</a></h2>
 <p>Clone Apache Spark locally and apply the diff file from Comet.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:apache/spark.git<span class="w"> </span>apache-spark
+<p>Note: this is a shallow clone of a tagged Spark commit and is not suitable for general Spark development.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span><span class="s1">&#39;v3.4.3&#39;</span><span class="w"> </span>--single-branch<span class="w"> </span>--depth<span class="w"> </span><span class="m">1</span><span class="w"> </span>git@github.com:apache/spark.git<span class="w"> </span>apache-spark
 <span class="nb">cd</span><span class="w"> </span>apache-spark
-git<span class="w"> </span>checkout<span class="w"> </span>v3.4.3
 git<span class="w"> </span>apply<span class="w"> </span>../datafusion-comet/dev/diffs/3.4.3.diff
 </pre></div>
 </div>
 </section>
 <section id="run-spark-sql-tests">
 <h2>3. Run Spark SQL Tests<a class="headerlink" href="#run-spark-sql-tests" title="Link to this heading">¶</a></h2>
-<p>Use the following commands to run the SQL tests locally.</p>
+<section id="use-the-following-commands-to-run-the-spark-sql-test-suite-locally">
+<h3>Use the following commands to run the Spark SQL test suite locally.<a class="headerlink" href="#use-the-following-commands-to-run-the-spark-sql-test-suite-locally" title="Link to this heading">¶</a></h3>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">ENABLE_COMET</span><span class="o">=</span><span class="nb">true</span><span class="w"> </span>build/sbt<span class="w"> </span>catalyst/test
 <span class="nv">ENABLE_COMET</span><span class="o">=</span><span class="nb">true</span><span class="w"> </span>build/sbt<span class="w"> </span><span class="s2">&quot;sql/testOnly * -- -l org.apache.spark.tags.ExtendedSQLTest -l org.apache.spark.tags.SlowSQLTest&quot;</span>
 <span class="nv">ENABLE_COMET</span><span class="o">=</span><span class="nb">true</span><span class="w"> </span>build/sbt<span class="w"> </span><span class="s2">&quot;sql/testOnly * -- -n org.apache.spark.tags.ExtendedSQLTest&quot;</span>
@@ -404,15 +427,45 @@ git<span class="w"> </span>apply<span class="w"> </span>../datafusion-comet/dev/
 </pre></div>
 </div>
 </section>
+<section id="steps-to-run-individual-test-suites-through-sbt">
+<h3>Steps to run individual test suites through SBT<a class="headerlink" href="#steps-to-run-individual-test-suites-through-sbt" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Open SBT with Comet enabled</p></li>
+</ol>
+<div class="highlight-sbt notranslate"><div class="highlight"><pre><span></span>ENABLE_COMET=true sbt -Dspark.test.includeSlowTests=true 
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Run individual tests (Below code runs test named <code class="docutils literal notranslate"><span class="pre">SPARK-35568</span></code> in the <code class="docutils literal notranslate"><span class="pre">spark-sql</span></code> module)</p></li>
+</ol>
+<div class="highlight-sbt notranslate"><div class="highlight"><pre><span></span> sql/testOnly  org.apache.spark.sql.DynamicPartitionPruningV1SuiteAEOn -- -z &quot;SPARK-35568&quot;
+</pre></div>
+</div>
+</section>
+<section id="steps-to-run-individual-test-suites-in-intellij-ide">
+<h3>Steps to run individual test suites in IntelliJ IDE<a class="headerlink" href="#steps-to-run-individual-test-suites-in-intellij-ide" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Add below configuration in VM Options for your test case (apache-spark repository)</p></li>
+</ol>
+<div class="highlight-sbt notranslate"><div class="highlight"><pre><span></span>-Dspark.comet.enabled=true -Dspark.comet.debug.enabled=true -Dspark.plugins=org.apache.spark.CometPlugin -DXmx4096m -Dspark.executor.heartbeatInterval=20000 -Dspark.network.timeout=10000 --add-exports=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">ENABLE_COMET=true</span></code> in environment variables
+<img alt="img.png" src="../_images/img.png" /></p></li>
+<li><p>After the above tests are configured, spark tests can be run with debugging enabled on spark/comet code. Note that Comet is added as a dependency and the classes are readonly while debugging from Spark. Any new changes to Comet are to be built and deployed locally through the command (<code class="docutils literal notranslate"><span class="pre">PROFILES=&quot;-Pspark-3.4&quot;</span> <span class="pre">make</span> <span class="pre">release</span></code>)</p></li>
+</ol>
+</section>
+</section>
 <section id="creating-a-diff-file-for-a-new-spark-version">
 <h2>Creating a diff file for a new Spark version<a class="headerlink" href="#creating-a-diff-file-for-a-new-spark-version" title="Link to this heading">¶</a></h2>
 <p>Once Comet has support for a new Spark version, we need to create a diff file that can be applied to that version
 of Apache Spark to enable Comet when running tests. This is a highly manual process and the process can
 vary depending on the changes in the new version of Spark, but here is a general guide to the process.</p>
 <p>We typically start by applying a patch from a previous version of Spark. For example, when enabling the tests
-for Spark version 3.5.1 we may start by applying the existing diff for 3.4.3 first.</p>
+for Spark version 3.5.5 we may start by applying the existing diff for 3.4.3 first.</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>git/apache/spark
-git<span class="w"> </span>checkout<span class="w"> </span>v3.5.1
+git<span class="w"> </span>checkout<span class="w"> </span>v3.5.5
 git<span class="w"> </span>apply<span class="w"> </span>--reject<span class="w"> </span>--whitespace<span class="o">=</span>fix<span class="w"> </span>../datafusion-comet/dev/diffs/3.4.3.diff
 </pre></div>
 </div>
@@ -448,7 +501,10 @@ command generated the following files.</p>
 </section>
 <section id="generating-the-diff-file">
 <h2>Generating The Diff File<a class="headerlink" href="#generating-the-diff-file" title="Link to this heading">¶</a></h2>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>diff<span class="w"> </span>v3.5.1<span class="w"> </span>&gt;<span class="w"> </span>../datafusion-comet/dev/diffs/3.5.1.diff
+<p>The diff file can be generated using the <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">diff</span></code> command. It may be necessary to set the <code class="docutils literal notranslate"><span class="pre">core.abbrev</span></code>
+configuration setting to use 11 digits hashes for consistency with existing diff files.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>config<span class="w"> </span>core.abbrev<span class="w"> </span><span class="m">11</span><span class="p">;</span>
+git<span class="w"> </span>diff<span class="w"> </span>v3.5.5<span class="w"> </span>&gt;<span class="w"> </span>../datafusion-comet/dev/diffs/3.5.5.diff
 </pre></div>
 </div>
 </section>

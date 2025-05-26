@@ -41,7 +41,7 @@ under the License.
       
   
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/pydata-sphinx-theme.css?v=1140d252" />
     <link rel="stylesheet" type="text/css" href="../_static/theme_overrides.css?v=c6d785ac" />
     
@@ -206,6 +206,11 @@ under the License.
   </a>
  </li>
  <li class="toctree-l1">
+  <a class="reference internal" href="../contributor-guide/tracing.html">
+   Tracing
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="../contributor-guide/profiling_native_code.html">
    Profiling Native Code
   </a>
@@ -347,8 +352,13 @@ under the License.
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#complex-types">
-   Complex Types
+  <a class="reference internal nav-link" href="#arrays">
+   Arrays
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#structs">
+   Structs
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -456,7 +466,10 @@ under the License.
 <tr class="row-odd"><td><p>Divide (<code class="docutils literal notranslate"><span class="pre">/</span></code>)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p>Remainder (<code class="docutils literal notranslate"><span class="pre">%</span></code>)</p></td>
+<tr class="row-even"><td><p>IntegralDivide (<code class="docutils literal notranslate"><span class="pre">div</span></code>)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>Remainder (<code class="docutils literal notranslate"><span class="pre">%</span></code>)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -576,28 +589,31 @@ under the License.
 <tr class="row-odd"><td><p>StartsWith</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p>StringSpace</p></td>
+<tr class="row-even"><td><p>StringRPad</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p>StringTrim</p></td>
+<tr class="row-odd"><td><p>StringSpace</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p>StringTrimBoth</p></td>
+<tr class="row-even"><td><p>StringTrim</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p>StringTrimLeft</p></td>
+<tr class="row-odd"><td><p>StringTrimBoth</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p>StringTrimRight</p></td>
+<tr class="row-even"><td><p>StringTrimLeft</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p>Substring</p></td>
+<tr class="row-odd"><td><p>StringTrimRight</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p>Translate</p></td>
+<tr class="row-even"><td><p>Substring</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p>Upper</p></td>
+<tr class="row-odd"><td><p>Translate</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>Upper</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -852,8 +868,44 @@ under the License.
 </tbody>
 </table>
 </section>
-<section id="complex-types">
-<h2>Complex Types<a class="headerlink" href="#complex-types" title="Link to this heading">¶</a></h2>
+<section id="arrays">
+<h2>Arrays<a class="headerlink" href="#arrays" title="Link to this heading">¶</a></h2>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Expression</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ArrayAppend</p></td>
+<td><p>Experimental</p></td>
+</tr>
+<tr class="row-odd"><td><p>ArrayContains</p></td>
+<td><p>Experimental</p></td>
+</tr>
+<tr class="row-even"><td><p>ArrayIntersect</p></td>
+<td><p>Experimental</p></td>
+</tr>
+<tr class="row-odd"><td><p>ArrayJoin</p></td>
+<td><p>Experimental</p></td>
+</tr>
+<tr class="row-even"><td><p>ArrayRemove</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>ArraysOverlap</p></td>
+<td><p>Experimental</p></td>
+</tr>
+<tr class="row-even"><td><p>ElementAt</p></td>
+<td><p>Arrays only</p></td>
+</tr>
+<tr class="row-odd"><td><p>GetArrayItem</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="structs">
+<h2>Structs<a class="headerlink" href="#structs" title="Link to this heading">¶</a></h2>
 <table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Expression</p></th>
@@ -862,12 +914,6 @@ under the License.
 </thead>
 <tbody>
 <tr class="row-even"><td><p>CreateNamedStruct</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p>ElementAt</p></td>
-<td><p>Arrays only</p></td>
-</tr>
-<tr class="row-even"><td><p>GetArrayItem</p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p>GetStructField</p></td>
