@@ -124,11 +124,6 @@ under the License.
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="kubernetes.html">
-   Kubernetes Guide
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="datasources.html">
    Supported Data Sources
   </a>
@@ -166,6 +161,16 @@ under the License.
  <li class="toctree-l1">
   <a class="reference internal" href="metrics.html">
    Metrics Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="iceberg.html">
+   Iceberg Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="kubernetes.html">
+   Kubernetes Guide
   </a>
  </li>
 </ul>
@@ -307,6 +312,11 @@ under the License.
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#binary-try-arithmetic">
+   Binary Try Arithmetic
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#conditional-expressions">
    Conditional Expressions
   </a>
@@ -354,6 +364,11 @@ under the License.
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#arrays">
    Arrays
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#maps">
+   Maps
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -467,10 +482,34 @@ under the License.
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p>IntegralDivide (<code class="docutils literal notranslate"><span class="pre">div</span></code>)</p></td>
-<td><p></p></td>
+<td><p>All operands are cast to DecimalType (in case the input type is not already decima type) with precision 19 and scale 0. Please set <code class="docutils literal notranslate"><span class="pre">spark.comet.cast.allowIncompatible</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code> to enable DataFusion’s cast operation for LongType inputs.</p></td>
 </tr>
 <tr class="row-odd"><td><p>Remainder (<code class="docutils literal notranslate"><span class="pre">%</span></code>)</p></td>
 <td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="binary-try-arithmetic">
+<h2>Binary Try Arithmetic<a class="headerlink" href="#binary-try-arithmetic" title="Link to this heading">¶</a></h2>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Expression</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">try_add</span></code></p></td>
+<td><p>Adds operands (IntegerTypes only) or results NULL incase of overflow</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">try_sub</span></code></p></td>
+<td><p>Subtracts operands (IntegerTypes only) or results NULL incase of overflow</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">try_mul</span></code></p></td>
+<td><p>Multiplies operands (IntegerTypes only) or results NULL incase of overflow</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">try_div</span></code></p></td>
+<td><p>Subtracts operands (IntegerTypes only) or results NULL incase of overflow</p></td>
 </tr>
 </tbody>
 </table>
@@ -920,6 +959,33 @@ under the License.
 <td><p>Arrays only</p></td>
 </tr>
 <tr class="row-even"><td><p>GetArrayItem</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="maps">
+<h2>Maps<a class="headerlink" href="#maps" title="Link to this heading">¶</a></h2>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Expression</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>MapLookupByKey ([])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>MapKeys</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>MapValues</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>MapEntries</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>MapFromArrays</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
